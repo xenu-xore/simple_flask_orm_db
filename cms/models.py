@@ -1,4 +1,5 @@
-from cms import db, bcrypt_flask
+from cms import db
+# bcrypt_flask
 from werkzeug.security import generate_password_hash
 import datetime
 

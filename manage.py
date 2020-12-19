@@ -7,6 +7,7 @@ import os
 import datetime
 
 app.config.from_object(os.environ['APP_SETTINGS'])
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 migrate = Migrate(app, db)
 manager = Manager(app)

@@ -1,17 +1,17 @@
 from flask import Flask, render_template
 import os
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_debugtoolbar import DebugToolbarExtension
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
-
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 login_manager = LoginManager()
 login_manager.init_app(app)
-bcrypt_flask = Bcrypt(app)
-
+# bcrypt_flask = Bcrypt(app)
+toolbar = DebugToolbarExtension(app)
 db = SQLAlchemy(app)
 
 from cms.login.views import login_blueprint

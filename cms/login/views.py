@@ -5,7 +5,7 @@ from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, \
     login_required
 from cms.models import Users
-from cms import bcrypt_flask
+# from cms import bcrypt_flask
 
 login_blueprint = Blueprint('login', __name__)
 
