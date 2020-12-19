@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить категорию</title>
+</head>
+<body>
+<form method="post">
+
+    {{ form.csrf_token }}
+    {{ form.name_category(placeholder='Название категории') }}
+    {{ form.push_category(value="Отправить")}}
+
+</form>
+<a href="/">Главная</a>
+</body>
+</html>

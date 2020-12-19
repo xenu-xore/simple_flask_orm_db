@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Войти</h1>
+<form method="post">
+    {{ form.csrf_token }}
+    {{ form.login(placeholder='Login') }}
+    {{ form.password(placeholder="Password") }}
+    <button type="submit">Войти!</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Добро пожаловать</h1>
+<div class="exit">
+    {% if current_user.is_authenticated() %}
+    <a href="{{ url_for('login.logout') }}">Выйти</a>
+    {% endif %}
+</div>
+<div class="article_and_category">
+    <ul>
+        <li>
+            <a href="/create_article/">Добавить статью</a>
+        </li>
+        <li>
+            <a href="/create_category/">Добавить категорию</a>
+        </li>
+        <li>
+            <a href="/articles/">Посмотреть список статей</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
