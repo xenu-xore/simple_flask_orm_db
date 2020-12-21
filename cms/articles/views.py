@@ -14,24 +14,27 @@ articles_blueprint = Blueprint('articles', __name__)
 @login_required
 def create_article():
     form = CreateArticle(request.form)
-    form.select_category.choices = [("", "---")] + [(g.id, g.name_category) for g in Category.query.all()]
-    if request.method == 'POST' or request.method == "GET" and form.validate_on_submit():
+    try:
+        form.select_category.choices = [("", "---")] + [(g.id, g.name_category) for g in Category.query.all()]
+        if request.method == 'POST' or request.method == "GET" and form.validate_on_submit():
 
-        article = Articles(
-            title=form.title.data,
-            short_description=form.short_description.data,
-            article=form.article.data,
-            category_id=form.select_category.data,
-            slug_art=transliterate(form.slug_art.data)
-        )
-        try:
-            db.session.add(article)
-            db.session.commit()
-            return redirect(url_for('/'))
-        except:
-            flash('Что-то пошло не так')
-            return redirect(url_for('articles.create_article'))
-    return render_template('user_templates/create_article.html', form=form)
+            article = Articles(
+                title=form.title.data,
+                short_description=form.short_description.data,
+                article=form.article.data,
+                category_id=form.select_category.data,
+                slug_art=transliterate(form.slug_art.data).lower()
+            )
+            try:
+                db.session.add(article)
+                db.session.commit()
+                return redirect(url_for('/'))
+            except:
+                flash('Что-то пошло не так')
+                return redirect(url_for('articles.create_article'))
+        return render_template('user_templates/create_article.html', form=form)
+    except Exception as error:
+        return render_template('error/error_404.html', error=error), 404
 
 
 @articles_blueprint.route('/create_category/', methods=['GET', 'POST'])
