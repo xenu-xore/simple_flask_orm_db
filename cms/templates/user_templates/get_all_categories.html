@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for i in categories%}
+<h2><a href="/category/{{i.slug_cat}}">{{i.name_category}}</a></h2>
+<p>Ссылка: {{i.slug_cat}}</p>
+<a href="/category/{{i.slug_cat}}">{{i.name_category}}</a>
+{% endfor %}
+<ul>
+    <li><a href="/">Главная</a></li>
+</ul>
+
+</body>
+</html>

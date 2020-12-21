@@ -33,4 +33,8 @@ def user_loader(user_id):
 
 @app.errorhandler(500)
 def server_error_page(error):
-    return render_template("error_500.html"), 500
+    return render_template("error/error_500.html"), 500
+
+@app.errorhandler(404)
+def server_error_page(error):
+    return render_template("error/error_404.html"), 404

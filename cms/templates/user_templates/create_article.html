@@ -8,11 +8,10 @@
 <form method="post">
     {{ form.csrf_token }}
     {{ form.title(placeholder='Заголовок') }}
-    {% if  form.select_category %}
     {{ form.select_category(placeholder="Выберите категорию") }}
-    {% endif %}
     {{ form.short_description(placeholder="Короткое описание") }}
     {{ form.article(placeholder="Текст статьи") }}
+    {{ form.slug_art(placeholder="URL") }}
     {{ form.push_article(value='Отправить') }}
 </form>
 <a href="/">Главная</a>

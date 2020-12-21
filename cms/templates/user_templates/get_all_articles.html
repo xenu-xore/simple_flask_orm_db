@@ -6,13 +6,15 @@
 </head>
 <body>
 {% for i in articles%}
-<h2>{{i.title}}</h2>
+<h2><a href="/articles/{{i.slug_art}}">{{i.title}}</a></h2>
 <p>Короткое описание: {{i.short_description}}</p>
 <p>Статья: {{i.article}}</p>
 <b>{{i.date_publisher}}</b>
-<p>{{i.category.name_category}}</p>
-<a href="/articles/{{i.id}}">{{i.title}}</a>
+<a href="/category/{{i.category_owner.slug_cat}}">{{i.category_owner.name_category}}</a>
+<a href="/articles/{{i.slug_art}}">{{i.title}}</a>
 {% endfor %}
-
+<ul>
+    <li><a href="/">Главная</a></li>
+</ul>
 </body>
 </html>

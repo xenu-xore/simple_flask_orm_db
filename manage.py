@@ -4,7 +4,6 @@ from flask_migrate import Migrate, MigrateCommand
 from cms import app, db
 from cms.models import Users
 import os
-import datetime
 
 app.config.from_object(os.environ['APP_SETTINGS'])
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -26,9 +25,10 @@ def create_admin():
     db.session.add(Users(
         "admin",
         "admin",
-        admin=True,)
+        admin=True, )
     )
     db.session.commit()
+
 
 if __name__ == '__main__':
     manager.run()

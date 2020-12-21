@@ -1,13 +1,13 @@
 from flask import redirect, render_template, Blueprint, \
-    flash, url_for, request
+    flash, url_for, request, Response
 from .forms import CreateArticle, CreateCategory
 from flask_login import login_user, logout_user, \
     login_required
 from cms import db
 from cms.models import Category, Articles
+from cms.articles.translate import transliterate
 
 articles_blueprint = Blueprint('articles', __name__)
-
 
 
 @articles_blueprint.route('/create_article/', methods=['GET', 'POST'])
@@ -16,11 +16,13 @@ def create_article():
     form = CreateArticle(request.form)
     form.select_category.choices = [("", "---")] + [(g.id, g.name_category) for g in Category.query.all()]
     if request.method == 'POST' or request.method == "GET" and form.validate_on_submit():
+
         article = Articles(
             title=form.title.data,
             short_description=form.short_description.data,
             article=form.article.data,
-            category_id=form.select_category.data
+            category_id=form.select_category.data,
+            slug_art=transliterate(form.slug_art.data)
         )
         try:
             db.session.add(article)
@@ -39,6 +41,7 @@ def create_category():
     if request.method == 'POST' and form.validate_on_submit():
         category = Category(
             name_category=form.name_category.data,
+            slug_cat=transliterate(form.slug_cat.data)
         )
         try:
             db.session.add(category)
@@ -52,14 +55,32 @@ def create_category():
 
 @articles_blueprint.route('/articles/')
 def get_all_articles():
-    articles= Articles.query.all()
-    cat = Articles()
+    articles = Articles.query.all()
+    return render_template('user_templates/get_all_articles.html', articles=articles)
 
-    return render_template('user_templates/get_all_articles.html', articles=articles,
-                           category=cat,
-                           )
 
-@articles_blueprint.route('/articles/<int:id>')
-def detal_articles(id):
-    article = Articles.query.get(id)
-    return render_template('user_templates/detal_article.html', article=article)
+@articles_blueprint.route('/articles/<string:slug_art>/')
+def detail_article(slug_art):
+    article = Articles.query.filter_by(slug_art=slug_art).one_or_none()
+
+    if article is not None:
+        return render_template('user_templates/detail_article.html', article_one=article)
+
+    else:
+        return render_template('error/error_404.html'), 404
+
+
+@articles_blueprint.route('/category/<string:slug_cat>/')
+def detail_category(slug_cat):
+    category = Category.query.filter_by(slug_cat=slug_cat).one_or_none()
+
+    if category is not None:
+        return render_template('user_templates/detail_category.html', category_one=category)
+
+    else:
+        return render_template('error/error_404.html'), 404
+
+@articles_blueprint.route('/category/')
+def get_all_categories():
+    categories = Category.query.all()
+    return render_template('user_templates/get_all_categories.html', categories=categories)

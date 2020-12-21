@@ -37,10 +37,9 @@ class Users(db.Model):
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name_category = db.Column(db.String(255), nullable=True)
-    article_one = db.relationship('Articles', backref='category', uselist=False)
+    slug_cat = db.Column(db.String(255), nullable=True, unique=True)
+    article_one = db.relationship('Articles', backref='category_owner')
 
-    def __repr__(self,id, name_category):
-        return "<Category %r %r>" % self.id, self.name_category
 
 class Articles(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -48,8 +47,5 @@ class Articles(db.Model):
     short_description = db.Column(db.String(255), nullable=False)
     article = db.Column(db.Text, nullable=True)
     date_publisher = db.Column(db.DateTime(), default=datetime.datetime.now())
+    slug_art = db.Column(db.String(255), nullable=True, unique=True)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
-
-    def __repr__(self,id, name_category):
-        return "<Articles %r %r>" % (self.id, self.article)
-

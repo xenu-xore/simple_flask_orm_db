@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length
 
 class CreateCategory(FlaskForm):
     name_category = StringField('name_category', validators=[DataRequired(), Length(min=3, max=50)])
+    slug_cat = StringField('slug_cat', validators=[DataRequired(), Length(min=3, max=255)])
     push_category = SubmitField('Submit')
 
 
@@ -14,4 +15,5 @@ class CreateArticle(FlaskForm):
     short_description = StringField('short_description', validators=[DataRequired(), Length(min=3, max=50)])
     article = TextAreaField('article', validators=[DataRequired()])
     select_category = SelectField(u'Выбор категории', coerce=str, validators=[DataRequired()])
+    slug_art = StringField('slug_art', validators=[DataRequired(), Length(min=3, max=255)])
     push_article = SubmitField('Submit')
