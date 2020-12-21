@@ -8,7 +8,7 @@
 <h1>{{article_one.title}}</h1>
 <ul>
     <li>{{article_one.short_description}}</li>
-    <li>{{article_one.article}}</li>
+    <li>{{article_one.article|safe}}</li>
     <li>{{article_one.date_publisher}}</li>
     <li>{{article_one.slug_art}}</li>
     <li><a href="/category/{{article_one.category_owner.slug_cat}}/">{{article_one.category_owner.name_category}}</a></li>

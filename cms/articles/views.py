@@ -58,7 +58,8 @@ def create_category():
 
 @articles_blueprint.route('/articles/')
 def get_all_articles():
-    articles = Articles.query.all()
+    # articles = Articles.query.all()
+    articles = Articles.query.order_by(Articles.date_publisher.desc()).all()
     return render_template('user_templates/get_all_articles.html', articles=articles)
 
 
@@ -83,7 +84,9 @@ def detail_category(slug_cat):
     else:
         return render_template('error/error_404.html'), 404
 
+
 @articles_blueprint.route('/category/')
 def get_all_categories():
     categories = Category.query.all()
+
     return render_template('user_templates/get_all_categories.html', categories=categories)
