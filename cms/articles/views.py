@@ -102,8 +102,9 @@ def get_all_categories():
 def edit_article(slug_art):
     try:
         art = Articles.query.filter_by(slug_art=slug_art).first()
-        form = EditArticles(obj=art)
-        form.select_cat.choices = [("", "Выберите категорию")] + [(g.id, g.name_category) for g in Category.query.all()]
+        form = EditArticles(request.form,obj=art)
+        form.select_cat.choices = [("", "Выберите категорию")] + \
+                                  [(g.id, g.name_category) for g in Category.query.order_by('name_category')]
         if request.method == 'POST' or request.method == "GET" and form.validate_on_submit():
 
             try:
