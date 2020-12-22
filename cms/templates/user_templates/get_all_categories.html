@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
 {% for i in categories%}
 <h2><a href="/category/{{i.slug_cat}}">{{i.name_category}}</a></h2>
 <p>Ссылка: {{i.slug_cat}}</p>
@@ -14,5 +10,4 @@
     <li><a href="/">Главная</a></li>
 </ul>
 
-</body>
-</html>
+{% endblock content %}

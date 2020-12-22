@@ -24,4 +24,4 @@ def transliterate(name):
     # Циклически заменяем все буквы в строке
     for key in slovar:
         name = name.replace(key, slovar[key])
-    return name
+    return name.lower()

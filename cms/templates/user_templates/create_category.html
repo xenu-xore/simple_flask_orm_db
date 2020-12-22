@@ -1,18 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Добавить категорию</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
 <form method="post">
 
     {{ form.csrf_token }}
-    {{ form.name_category(placeholder='Название категории') }}
-    {{ form.slug_cat(placeholder="URL") }}
-    {{ form.push_category(value="Отправить")}}
+    <p>Название категории: </p> {{ form.name_category(placeholder='Название категории') }}
+    <p>URL: </p> {{ form.slug_cat(placeholder="URL") }}
+    <p>Отправить</p> {{ form.push_category(value="Отправить")}}
 
 </form>
 <a href="/">Главная</a>
-</body>
-</html>
+{% endblock content %}

@@ -16,8 +16,8 @@ class DevConfig(BaseConfig):
     SECRET_KEY = 'nadezda'
     DEBUG = True
     WTF_CSRF_ENABLED = False
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'dev.sqlite')
-    SQLALCHEMY_DATABASE_URI = 'postgresql://flask_user:19902273@localhost/flasklogin_db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'dev.sqlite')
+    # SQLALCHEMY_DATABASE_URI = 'postgresql://flask_user:19902273@localhost/flasklogin_db'
     DEBUG_TB_ENABLED = False
     STRIPE_SECRET_KEY = 'foo'
     STRIPE_PUBLISHABLE_KEY = 'bar'
@@ -32,3 +32,5 @@ class ProConfig(BaseConfig):
     DEBUG_TB_ENABLED = False
     STRIPE_SECRET_KEY = 'foo'
     STRIPE_PUBLISHABLE_KEY = 'bar'
+
+#  set APP_SETTINGS=cms.config.DevConfig

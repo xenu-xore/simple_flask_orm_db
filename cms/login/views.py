@@ -1,10 +1,9 @@
-from flask import redirect, render_template, Blueprint, \
-    flash, url_for, request
+from flask import redirect, render_template, Blueprint, flash, url_for, request
 from .forms import LoginForm
 from werkzeug.security import check_password_hash
-from flask_login import login_user, logout_user, \
-    login_required
+from flask_login import login_user, logout_user, login_required
 from cms.models import Users
+
 # from cms import bcrypt_flask
 
 login_blueprint = Blueprint('login', __name__)
@@ -38,3 +37,5 @@ def logout():
     logout_user()
     flash('Вы вышли из системы.', 'success')
     return redirect(url_for('login.login'))
+
+

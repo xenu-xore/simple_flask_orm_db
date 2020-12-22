@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Детальная страница статьи</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
 <h1>{{article_one.title}}</h1>
 <ul>
     <li>{{article_one.short_description}}</li>
@@ -13,11 +9,10 @@
     <li>{{article_one.slug_art}}</li>
     <li><a href="/category/{{article_one.category_owner.slug_cat}}/">{{article_one.category_owner.name_category}}</a></li>
 </ul>
-
+<li><a href="/edit_article/{{article_one.slug_art}}/">Редактировать</a></li>
 <ul>
 <li><a href="/category/">Все Категории</a></li>
 <li><a href="/articles/">Все Статьи</a></li>
 <li><a href="/">Главная</a></li>
 </ul>
-</body>
-</html>
+{% endblock content %}

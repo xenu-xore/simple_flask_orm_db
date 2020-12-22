@@ -5,7 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-{% for i in articles%}
+<a href="/">Главная</a>
+
+{% for i in articles.items %}
 <h2><a href="/articles/{{i.slug_art}}">{{i.title}}</a></h2>
 <p>Короткое описание: {{i.short_description}}</p>
 <p>Статья: {{i.article}}</p>
@@ -13,8 +15,34 @@
 <a href="/category/{{i.category_owner.slug_cat}}">{{i.category_owner.name_category}}</a>
 <a href="/articles/{{i.slug_art}}">{{i.title}}</a>
 {% endfor %}
-<ul>
-    <li><a href="/">Главная</a></li>
+<ul class="pagination">
+    {% if articles.has_prev %}
+    <li class="page-item"> <a class="page-link" href="{{ url_for('articles.get_all_articles', page=articles.prev_num) }}">Назад</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link btn disabled" href="#">Начало</a></li>
+    {% endif %}
+
+
+    {% if articles.has_next %}
+    <li class="page-item"> <a class="page-link" href="{{ url_for('articles.get_all_articles', page=articles.next_num) }}">Вперед</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link btn disabled" href="#">Конец</a></li>
+    {% endif %}
+
 </ul>
+<div class=pagination>
+    {% for page in articles.iter_pages() %}
+    {% if page %}
+    {% if page != articles.page %}
+    <a href="{{ url_for('articles.get_all_articles', page=page) }}">{{ page }}</a>
+    {% else %}
+    <strong>{{ page }}</strong>
+    {% endif %}
+    {% else %}
+    <span class=ellipsis>…</span>
+    {% endif %}
+    {% endfor %}
+</div>
+
 </body>
 </html>

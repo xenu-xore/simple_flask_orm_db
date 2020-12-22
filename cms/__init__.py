@@ -22,7 +22,8 @@ app.register_blueprint(articles_blueprint)
 
 from cms.models import Users
 
-login_manager.login_view = "cms.login"
+#  login.login - это login папка login это функция, вызов login.login
+login_manager.login_view = "login.login"
 login_manager.login_message_category = "danger"
 
 
