@@ -13,7 +13,8 @@ from cms.articles.translate import transliterate
 articles_blueprint = Blueprint('articles', __name__)
 
 # UNIQUE_VIOLATION для slug_cat, slug_art
-i=0
+i = 0
+
 
 @articles_blueprint.route('/create_article/', methods=['GET', 'POST'])
 @login_required
@@ -48,7 +49,7 @@ def create_article():
                         short_description=form.short_description.data,
                         article=form.article.data,
                         category_id=form.select_category.data,
-                        slug_art = article.slug_art+'-'+str(i)
+                        slug_art=article.slug_art + '-' + str(i)
                     )
 
                     db.session.add(article)
@@ -57,7 +58,6 @@ def create_article():
         return render_template('user_templates/create_article.html', form=form)
     except Exception as error:
         return render_template('error/error_404.html', error=error), 404
-
 
 
 @articles_blueprint.route('/create_category/', methods=['GET', 'POST'])
