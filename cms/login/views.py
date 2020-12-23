@@ -16,7 +16,7 @@ def login():
         user = Users.query.filter_by(login=form.login.data).first()
         if user and check_password_hash(user.password, request.form['password']):
             login_user(user)
-            flash('Welcome.', 'success')
+            flash('Вы вошли в систему.', 'success')
             return redirect(url_for('login.hello'))
         else:
             flash('Неверный логин и/или пароль.', 'danger')

@@ -5,15 +5,16 @@
 {{error}}
 {% endif %}
 <form method="post">
-        {{art.title}}
         {{ form.csrf_token }}
         <p>Заголовок: </p>{{ form.title(placeholder='Заголовок') }}
-        <p>Выберите категорию {{art.category_owner.name_category}}:</p> {{ form.select_cat(placeholder="Выберите категорию") }}
+        <p>Выберите категорию:</p> {{ form.select_cat(placeholder="Выберите категорию") }}
         <p>Короткое описание:</p> {{ form.short_description(placeholder="Короткое описание") }}
         <p>Текст статьи:</p> {{ form.article(placeholder="Текст статьи") }}
         <p>URL:</p> {{ form.slug_art(placeholder="URL") }}
         <p>{{ form.push_article(value='Отправить') }}</p>
 
 </form>
-<a href="/">Главная</a>
+<li><a href="/category/">Все Категории</a></li>
+<li><a href="/articles/">Все Статьи</a></li>
+<li><a href="/">Главная</a></li>
 {% endblock content %}

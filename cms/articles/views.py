@@ -4,6 +4,7 @@ from .forms import CreateArticle, CreateCategory, EditArticles
 from flask_login import login_user, logout_user, \
     login_required
 from cms import db
+import psycopg2.errorcodes as rew
 from cms.models import Category, Articles
 from cms.articles.translate import transliterate
 
@@ -27,13 +28,27 @@ def create_article():
                 category_id=form.select_category.data,
                 slug_art=transliterate(form.slug_art.data)
             )
+
             try:
                 db.session.add(article)
                 db.session.commit()
                 return redirect(url_for('articles.create_article'))
+
             except Exception as error:
-                flash(f'Что-то пошло не так: {error}')
-                return redirect(url_for('articles.create_article'))
+                foo = rew.lookup(error.orig.pgcode)
+                if foo == 'UNIQUE_VIOLATION':
+                    flash(f"Дублирование URL: {error.orig}")
+                    db.session.rollback()
+                    article = Articles(
+                        title=form.title.data,
+                        short_description=form.short_description.data,
+                        article=form.article.data,
+                        category_id=form.select_category.data,
+                        slug_art = article.slug_art+'-1')
+
+                    db.session.add(article)
+                    db.session.commit()
+                    return redirect(url_for('articles.create_article'))
         return render_template('user_templates/create_article.html', form=form)
     except Exception as error:
         return render_template('error/error_404.html', error=error), 404
@@ -53,8 +68,28 @@ def create_category():
             db.session.commit()
             return redirect(url_for('articles.create_category'))
         except Exception as error:
-            flash(f'Что-то пошло не так {error}')
-            return redirect(url_for('articles.create_category'))
+            foo = rew.lookup(error.orig.pgcode)
+            if foo == 'UNIQUE_VIOLATION':
+                flash(f"Дублирование URL: {error.orig}")
+                db.session.rollback()
+                category_db = Category.query.order_by('slug_cat')
+                a = 1
+
+                while a < 5:
+                    a += 1
+                    if a == 3:
+                        continue
+                    print(a)
+
+                    category = Category(
+                        name_category=form.name_category.data,
+                        slug_cat=category.slug_cat + 'x1'
+                    )
+
+                    db.session.add(category)
+                    db.session.commit()
+
+                    return redirect(url_for('articles.create_category'))
     return render_template('user_templates/create_category.html', form=form)
 
 
@@ -102,21 +137,22 @@ def get_all_categories():
 def edit_article(slug_art):
     try:
         art = Articles.query.filter_by(slug_art=slug_art).first()
-        form = EditArticles(request.form,obj=art)
-        form.select_cat.choices = [("", "Выберите категорию")] + \
-                                  [(g.id, g.name_category) for g in Category.query.order_by('name_category')]
-        if request.method == 'POST' or request.method == "GET" and form.validate_on_submit():
+        form = EditArticles(request.form, obj=art)
+        form.select_cat.choices = [(art.category_owner.id, art.category_owner.name_category)] + \
+                                  [(g.id, g.name_category) for g in Category.query.order_by('name_category') \
+                                   if g.name_category != art.category_owner.name_category]
+
+        if request.method == 'POST' and form.validate_on_submit():
+            form.populate_obj(art)
+            art.title = form.title.data
+            art.short_description = form.short_description.data
+            art.article = form.article.data
+            art.category_id = form.select_cat.data
+            art.slug_art = transliterate(form.slug_art.data)
 
             try:
-                form.populate_obj(art)
-                art.title = form.title.data,
-                art.short_description = form.short_description.data,
-                art.article = form.article.data,
-                art.category_id = form.select_cat.data,
-                art.slug_art = transliterate(form.slug_art.data)
-
                 db.session.commit()
-                flash(art.title)
+                flash(u'Сведения обновлены!')
                 return redirect(url_for('articles.edit_article', slug_art=art.slug_art))
             except Exception as error:
                 flash(f'Что-то пошло не так: {error}')

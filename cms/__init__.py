@@ -4,6 +4,7 @@ import os
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_debugtoolbar import DebugToolbarExtension
+
 app = Flask(__name__)
 
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -35,6 +36,7 @@ def user_loader(user_id):
 @app.errorhandler(500)
 def server_error_page(error):
     return render_template("error/error_500.html"), 500
+
 
 @app.errorhandler(404)
 def server_error_page(error):

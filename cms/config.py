@@ -26,7 +26,7 @@ class DevConfig(BaseConfig):
 class ProConfig(BaseConfig):
     SECRET_KEY = 'nadezda'
     DEBUG = True
-    WTF_CSRF_ENABLED = False
+    WTF_CSRF_ENABLED = True
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'dev.sqlite')
     SQLALCHEMY_DATABASE_URI = 'postgresql://flask_user:19902273@localhost/flasklogin_db'
     DEBUG_TB_ENABLED = False
