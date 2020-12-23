@@ -12,6 +12,8 @@ from cms.articles.translate import transliterate
 
 articles_blueprint = Blueprint('articles', __name__)
 
+# UNIQUE_VIOLATION для slug_cat, slug_art
+i=0
 
 @articles_blueprint.route('/create_article/', methods=['GET', 'POST'])
 @login_required
@@ -38,20 +40,24 @@ def create_article():
                 foo = rew.lookup(error.orig.pgcode)
                 if foo == 'UNIQUE_VIOLATION':
                     flash(f"Дублирование URL: {error.orig}")
-                    # db.session.rollback()
-                    # article = Articles(
-                    #     title=form.title.data,
-                    #     short_description=form.short_description.data,
-                    #     article=form.article.data,
-                    #     category_id=form.select_category.data,
-                    #     slug_art = article.slug_art+'-1')
-                    #
-                    # db.session.add(article)
-                    # db.session.commit()
+                    db.session.rollback()
+                    global i
+                    i += 1
+                    article = Articles(
+                        title=form.title.data,
+                        short_description=form.short_description.data,
+                        article=form.article.data,
+                        category_id=form.select_category.data,
+                        slug_art = article.slug_art+'-'+str(i)
+                    )
+
+                    db.session.add(article)
+                    db.session.commit()
                     return redirect(url_for('articles.create_article'))
         return render_template('user_templates/create_article.html', form=form)
     except Exception as error:
         return render_template('error/error_404.html', error=error), 404
+
 
 
 @articles_blueprint.route('/create_category/', methods=['GET', 'POST'])
@@ -71,15 +77,16 @@ def create_category():
             foo = rew.lookup(error.orig.pgcode)
             if foo == 'UNIQUE_VIOLATION':
                 flash(f"Дублирование URL: {error.orig}")
-                # db.session.rollback()
-                #
-                # category = Category(
-                #     name_category=form.name_category.data,
-                #     slug_cat=category.slug_cat + 'x1'
-                # )
-                #
-                # db.session.add(category)
-                # db.session.commit()
+                db.session.rollback()
+                global i
+                i += 1
+                category = Category(
+                    name_category=form.name_category.data,
+                    slug_cat=category.slug_cat + str(i)
+                )
+
+                db.session.add(category)
+                db.session.commit()
 
                 return redirect(url_for('articles.create_category'))
     return render_template('user_templates/create_category.html', form=form)
