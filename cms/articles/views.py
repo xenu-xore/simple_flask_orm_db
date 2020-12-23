@@ -38,16 +38,16 @@ def create_article():
                 foo = rew.lookup(error.orig.pgcode)
                 if foo == 'UNIQUE_VIOLATION':
                     flash(f"Дублирование URL: {error.orig}")
-                    db.session.rollback()
-                    article = Articles(
-                        title=form.title.data,
-                        short_description=form.short_description.data,
-                        article=form.article.data,
-                        category_id=form.select_category.data,
-                        slug_art = article.slug_art+'-1')
-
-                    db.session.add(article)
-                    db.session.commit()
+                    # db.session.rollback()
+                    # article = Articles(
+                    #     title=form.title.data,
+                    #     short_description=form.short_description.data,
+                    #     article=form.article.data,
+                    #     category_id=form.select_category.data,
+                    #     slug_art = article.slug_art+'-1')
+                    #
+                    # db.session.add(article)
+                    # db.session.commit()
                     return redirect(url_for('articles.create_article'))
         return render_template('user_templates/create_article.html', form=form)
     except Exception as error:
@@ -71,25 +71,17 @@ def create_category():
             foo = rew.lookup(error.orig.pgcode)
             if foo == 'UNIQUE_VIOLATION':
                 flash(f"Дублирование URL: {error.orig}")
-                db.session.rollback()
-                category_db = Category.query.order_by('slug_cat')
-                a = 1
+                # db.session.rollback()
+                #
+                # category = Category(
+                #     name_category=form.name_category.data,
+                #     slug_cat=category.slug_cat + 'x1'
+                # )
+                #
+                # db.session.add(category)
+                # db.session.commit()
 
-                while a < 5:
-                    a += 1
-                    if a == 3:
-                        continue
-                    print(a)
-
-                    category = Category(
-                        name_category=form.name_category.data,
-                        slug_cat=category.slug_cat + 'x1'
-                    )
-
-                    db.session.add(category)
-                    db.session.commit()
-
-                    return redirect(url_for('articles.create_category'))
+                return redirect(url_for('articles.create_category'))
     return render_template('user_templates/create_category.html', form=form)
 
 
