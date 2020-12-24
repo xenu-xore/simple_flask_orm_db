@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if error %}
+{{error}}
+{% endif %}
+<form method="post">
+        {{ form.csrf_token }}
+        <p>Название категории: </p>{{ form.name_category(placeholder='Название категории') }}
+        <p>URL:</p> {{ form.slug_cat(placeholder="URL") }}
+        <p>{{ form.push_category(value='Отправить') }}</p>
+
+</form>
+<li><a href="/category/">Все Категории</a></li>
+<li><a href="/articles/">Все Статьи</a></li>
+<li><a href="/">Главная</a></li>
+{% endblock content %}

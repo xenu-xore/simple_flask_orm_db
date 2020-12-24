@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import StringField, TextAreaField, SubmitField, SelectField,SelectMultipleField
+from wtforms.fields import StringField, TextAreaField, SubmitField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, Length
 
 
@@ -27,3 +27,9 @@ class EditArticles(FlaskForm):
     select_cat = SelectField(u'Выбор категории', coerce=str, validators=[DataRequired()])
     slug_art = StringField('slug_art', validators=[DataRequired(), Length(min=3, max=255)])
     push_article = SubmitField('Submit')
+
+
+class EditCategory(FlaskForm):
+    name_category = StringField('name_category', validators=[DataRequired(), Length(min=3, max=50)])
+    slug_cat = StringField('slug_cat', validators=[DataRequired(), Length(min=3, max=255)])
+    push_category = SubmitField('Submit')

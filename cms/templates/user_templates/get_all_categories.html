@@ -1,11 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% for i in categories%}
+{% for i in categories.items%}
 <h2><a href="/category/{{i.slug_cat}}">{{i.name_category}}</a></h2>
 <p>Ссылка: {{i.slug_cat}}</p>
 <a href="/category/{{i.slug_cat}}">{{i.name_category}}</a>
 {% endfor %}
+<ul class="pagination">
+    {% if categories.has_prev %}
+    <li class="page-item"> <a class="page-link" href="{{ url_for('articles.get_all_categories', page=categories.prev_num) }}">Назад</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link btn disabled" href="#">Начало</a></li>
+    {% endif %}
+
+
+    {% if categories.has_next %}
+    <li class="page-item"> <a class="page-link" href="{{ url_for('articles.get_all_categories', page=categories.next_num) }}">Вперед</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link btn disabled" href="#">Конец</a></li>
+    {% endif %}
+
+</ul>
+<div class=pagination>
+    {% for page in categories.iter_pages() %}
+    {% if page %}
+    {% if page != categories.page %}
+    <a href="{{ url_for('articles.get_all_categories', page=page) }}">{{ page }}</a>
+    {% else %}
+    <strong>{{ page }}</strong>
+    {% endif %}
+    {% else %}
+    <span class=ellipsis>…</span>
+    {% endif %}
+    {% endfor %}
+</div>
 <ul>
     <li><a href="/">Главная</a></li>
 </ul>

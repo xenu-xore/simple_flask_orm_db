@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1>{{category_one.name_category}}</h1>
+<li><a href="/edit_category/{{category_one.slug_cat}}/">Редактировать</a></li>
 {% for i in category_one.article_one %}
 <ul>
     <li>{{i.title}}</li>
@@ -9,6 +10,7 @@
     <li>Дата публикации: {{i.date_publisher}}</li>
     <li><a href="/articles/{{i.slug_art}}/">{{i.title}}</a></li>
 </ul>
+
 {% endfor %}
 <ul>
     <li><a href="/category/">Все Категории</a></li>
