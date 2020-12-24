@@ -106,11 +106,9 @@ def create_category():
 @articles_blueprint.route('/articles/', methods=['GET'], defaults={"page": 1})
 @articles_blueprint.route('/articles/<int:page>/', methods=['GET'])
 def get_all_articles(page):
-    # articles = Articles.query.all()
-
     page = page
     per_page = 3  # Количество статей на 1 странице
-    articles = Articles.query.order_by(Articles.date_publisher.desc()).paginate(page, per_page, error_out=False)
+    articles = Articles.query.order_by(Articles.date_publisher.desc()).paginate(page, per_page, error_out=True)
     return render_template('user_templates/get_all_articles.html', articles=articles)
 
 
@@ -141,7 +139,7 @@ def detail_category(slug_cat):
 def get_all_categories(page):
     page = page
     per_page = 3  # Количество статей на 1 странице
-    categories = Category.query.order_by(Category.name_category.desc()).paginate(page, per_page, error_out=False)
+    categories = Category.query.order_by(Category.name_category.desc()).paginate(page, per_page, error_out=True)
     return render_template('user_templates/get_all_categories.html', categories=categories)
 
 
@@ -149,30 +147,32 @@ def get_all_categories(page):
 @login_required
 def edit_article(slug_art):
     try:
-        art = Articles.query.filter_by(slug_art=slug_art).first()
-        form = EditArticles(request.form, obj=art)
-        form.select_cat.choices = [(art.category_owner.id, art.category_owner.name_category)] + \
-                                  [(g.id, g.name_category) for g in Category.query.order_by('name_category') \
-                                   if g.name_category != art.category_owner.name_category]
+        art = Articles.query.filter_by(slug_art=slug_art).one_or_none()
+        if art is not None:
+            form = EditArticles(request.form, obj=art)
+            form.select_cat.choices = [(art.category_owner.id, art.category_owner.name_category)] + \
+                                      [(g.id, g.name_category) for g in Category.query.order_by('name_category') \
+                                       if g.name_category != art.category_owner.name_category]
 
-        if request.method == 'POST' and form.validate_on_submit():
-            form.populate_obj(art)
-            art.title = form.title.data
-            art.short_description = form.short_description.data
-            art.article = form.article.data
-            art.category_id = form.select_cat.data
-            art.slug_art = transliterate(form.slug_art.data)
+            if request.method == 'POST' and form.validate_on_submit():
+                form.populate_obj(art)
+                art.title = form.title.data
+                art.short_description = form.short_description.data
+                art.article = form.article.data
+                art.category_id = form.select_cat.data
+                art.slug_art = transliterate(form.slug_art.data)
 
-            try:
-                db.session.commit()
-                flash(u'Сведения обновлены!')
-                return redirect(url_for('articles.edit_article', slug_art=art.slug_art))
-            except Exception as error:
-                flash(f'Что-то пошло не так: {error}')
-                return redirect(url_for('articles.edit_article', slug_art=art.slug_art))
+                try:
+                    db.session.commit()
+                    flash(u'Сведения обновлены!')
+                    return redirect(url_for('articles.edit_article', slug_art=art.slug_art))
+                except Exception as error:
+                    flash(f'Что-то пошло не так: {error}')
+                    return redirect(url_for('articles.edit_article', slug_art=art.slug_art))
 
-        return render_template('user_templates/edit_article.html', form=form, art=art)
-
+            return render_template('user_templates/edit_article.html', form=form, art=art)
+        else:
+            return render_template('error/error_404.html'), 404
     except Exception as error:
         return render_template('user_templates/edit_article.html', error=error)
 
@@ -183,23 +183,24 @@ def edit_category(slug_cat):
     try:
         cat = Category.query.filter_by(slug_cat=slug_cat).one_or_none()
 
-        print(cat)
-        form = EditCategory(request.form, obj=cat)
+        if cat is not None:
+            form = EditCategory(request.form, obj=cat)
 
-        if request.method == 'POST' and form.validate_on_submit():
-            form.populate_obj(cat)
-            cat.name_category = form.name_category.data
-            cat.slug_cat = transliterate(form.slug_cat.data)
+            if request.method == 'POST' and form.validate_on_submit():
+                form.populate_obj(cat)
+                cat.name_category = form.name_category.data
+                cat.slug_cat = transliterate(form.slug_cat.data)
 
-            try:
-                db.session.commit()
-                flash(u'Сведения обновлены!')
-                return redirect(url_for('articles.edit_category', slug_cat=cat.slug_cat))
-            except Exception as error:
-                flash(f'Что-то пошло не так: {error}')
-                return redirect(url_for('articles.edit_category', slug_cat=cat.slug_cat))
+                try:
+                    db.session.commit()
+                    flash(u'Сведения обновлены!')
+                    return redirect(url_for('articles.edit_category', slug_cat=cat.slug_cat))
+                except Exception as error:
+                    flash(f'Что-то пошло не так: {error}')
+                    return redirect(url_for('articles.edit_category', slug_cat=cat.slug_cat))
 
-        return render_template('user_templates/edit_category.html', form=form, cat=cat)
-
+            return render_template('user_templates/edit_category.html', form=form, cat=cat)
+        else:
+            return render_template('error/error_404.html'), 404
     except Exception as error:
         return render_template('user_templates/edit_category.html', error=error)
