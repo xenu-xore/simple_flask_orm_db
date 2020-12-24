@@ -3,11 +3,6 @@ from wtforms.fields import StringField, TextAreaField, SubmitField, SelectField,
 from wtforms.validators import DataRequired, Length
 
 
-class CreateCategory(FlaskForm):
-    name_category = StringField('name_category', validators=[DataRequired(), Length(min=3, max=50)])
-    slug_cat = StringField('slug_cat', validators=[DataRequired(), Length(min=3, max=255)])
-    push_category = SubmitField('Submit')
-
 
 class CreateArticle(FlaskForm):
     title = StringField('title', validators=[DataRequired(), Length(min=3, max=50, message=u'Очень мало символов нужно '
@@ -28,8 +23,3 @@ class EditArticles(FlaskForm):
     slug_art = StringField('slug_art', validators=[DataRequired(), Length(min=3, max=255)])
     push_article = SubmitField('Submit')
 
-
-class EditCategory(FlaskForm):
-    name_category = StringField('name_category', validators=[DataRequired(), Length(min=3, max=50)])
-    slug_cat = StringField('slug_cat', validators=[DataRequired(), Length(min=3, max=255)])
-    push_category = SubmitField('Submit')

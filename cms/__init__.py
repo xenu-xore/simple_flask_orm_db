@@ -17,9 +17,13 @@ db = SQLAlchemy(app)
 
 from cms.login.views import login_blueprint
 from cms.articles.views import articles_blueprint
+from cms.category.views import category_blueprint
+from cms.home.home import home_blueprint
 
 app.register_blueprint(login_blueprint)
 app.register_blueprint(articles_blueprint)
+app.register_blueprint(category_blueprint)
+app.register_blueprint(home_blueprint)
 
 from cms.models import Users
 

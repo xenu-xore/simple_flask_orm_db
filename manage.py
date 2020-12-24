@@ -19,6 +19,9 @@ manager.add_command('runserver', Server())
 def create_db():
     db.create_all()
 
+@manager.command
+def drop_db():
+    db.drop_all()
 
 @manager.command
 def create_admin():
