@@ -17,7 +17,7 @@ def login():
         if user and check_password_hash(user.password, request.form['password']):
             login_user(user)
             flash('Вы вошли в систему.', 'success')
-            return redirect(url_for('login.hello'))
+            return redirect(url_for('home.hello'))
         else:
             flash('Неверный логин и/или пароль.', 'danger')
             return render_template('admin_templates/login.html', form=form)
